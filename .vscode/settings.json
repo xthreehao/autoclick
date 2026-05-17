@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/home/xiao/project/autoclick"
+    "cmake.sourceDirectory": "/home/xiao/project/autoclick",
+    "makefile-tools.enabled": false
 }
