@@ -1,27 +1,31 @@
 #pragma once
 #include <QSlider>  
 #include <QLabel>  
-#include <QMouseEvent>  
+#include <QMouseEvent>
+#include <QKeyEvent>  
 
 int ui(int argc , char *argv[]);
 
 struct Log {
-    void logERROR(const char* a);
-    void logWARNING(const char* a);
-    void logINFO(const char* a);
+        void logERROR(const char* a);
+        void logWARNING(const char* a);
+        void logINFO(const char* a);
 };
 
-class MyCustomSlider : public QSlider  
+class MyCustomSlider : public QSlider
 {  
-public:  
-    MyCustomSlider(Qt::Orientation orientation, QWidget *parent=0);
-    ~MyCustomSlider();  
-  
-protected:  
-    virtual void mousePressEvent(QMouseEvent *event);  
-    virtual void mouseReleaseEvent(QMouseEvent *event);  
-    virtual void mouseMoveEvent(QMouseEvent *event);  
-  
-private:  
-    QLabel* m_displayLabel;  
-};  
+        public:  
+                MyCustomSlider(Qt::Orientation orientation, QWidget *parent=0);
+                ~MyCustomSlider();  
+        
+        protected:  
+                virtual void mousePressEvent(QMouseEvent *event);  
+                virtual void mouseReleaseEvent(QMouseEvent *event);  
+                virtual void mouseMoveEvent(QMouseEvent *event);  
+            
+        private:  
+                QLabel* m_displayLabel;
+};
+
+extern bool AutoClickRunning;
+void Autoclick(int cps);

@@ -4,6 +4,7 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QVBoxLayout>
+#include <QShortcut>
 
 int ui(int argc, char *argv[])
 {
@@ -14,12 +15,11 @@ int ui(int argc, char *argv[])
         window.resize(300,200);
 
         MyCustomSlider *slider = new MyCustomSlider(Qt::Horizontal, &window);
-
         slider ->setRange(1 , 100);
         slider ->setValue(18);
 
         QPushButton *button = new QPushButton();
-        button ->setText("a");
+        button ->setText("按R开启连点");
 
         QVBoxLayout *layout = new QVBoxLayout;
 
@@ -27,6 +27,13 @@ int ui(int argc, char *argv[])
         layout->addWidget(button);
 
         window.setLayout(layout);
+
+        QShortcut *shortcut = new QShortcut(Qt::Key_R, &window);
+        QObject::connect(shortcut, &QShortcut::activated, [&](){
+                AutoClickRunning = !AutoClickRunning;
+                button->setText(AutoClickRunning ? "连点中，按R关闭" : "按R开ue启连点");
+                Autoclick(slider->value());
+        });
 
         window.show();
 

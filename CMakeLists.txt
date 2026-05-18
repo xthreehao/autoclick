@@ -7,5 +7,5 @@ set(CMAKE_AUTOMOC ON)  # Qt 的元对象编译器
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 
-add_executable(myapp main.cpp ui.cpp log.cpp MyCustomsSlider.cpp)
+add_executable(myapp main.cpp ui.cpp log.cpp MyCustomsSlider.cpp clicker.cpp)
 target_link_libraries(myapp Qt6::Core Qt6::Widgets)
