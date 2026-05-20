@@ -1,8 +1,9 @@
 #pragma once
-#include <QSlider>  
-#include <QLabel>  
+#include <QSlider>
+#include <QLabel>
 #include <QMouseEvent>
-#include <QKeyEvent>  
+#include <QKeyEvent>
+#include "hotkey_registrar.h"
 
 int ui(int argc , char *argv[]);
 
@@ -12,20 +13,19 @@ struct Log {
         void logINFO(const char* a);
 };
 
-class MyCustomSlider : public QSlider
-{  
-        public:  
+class MyCustomSlider : public QSlider{
+        public:
                 MyCustomSlider(Qt::Orientation orientation, QWidget *parent=0);
-                ~MyCustomSlider();  
-        
-        protected:  
-                virtual void mousePressEvent(QMouseEvent *event);  
-                virtual void mouseReleaseEvent(QMouseEvent *event);  
-                virtual void mouseMoveEvent(QMouseEvent *event);  
-            
-        private:  
+                ~MyCustomSlider();
+
+        protected:
+                virtual void mousePressEvent(QMouseEvent *event);
+                virtual void mouseReleaseEvent(QMouseEvent *event);
+                virtual void mouseMoveEvent(QMouseEvent *event);
+
+        private:
                 QLabel* m_displayLabel;
 };
 
-extern bool AutoClickRunning;
-void Autoclick(int cps);
+extern volatile bool globalRPressed;
+void DoOneClick();

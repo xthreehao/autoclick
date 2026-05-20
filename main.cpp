@@ -5,6 +5,8 @@ int main (int argc , char *argv[])
 {
         Log log;
         log.logINFO("已成功启动");
+        HotkeyRegistrar registrar;
+        registrar.registerHotkey();
         ui(argc , argv);
         return 0;
 }

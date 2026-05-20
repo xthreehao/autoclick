@@ -5,6 +5,7 @@
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QShortcut>
+#include <QTimer>
 
 int ui(int argc, char *argv[])
 {
@@ -13,10 +14,10 @@ int ui(int argc, char *argv[])
         QWidget window;
         window.setWindowTitle("鼠标宏");
         window.resize(300,200);
-
+        
         MyCustomSlider *slider = new MyCustomSlider(Qt::Horizontal, &window);
         slider ->setRange(1 , 100);
-        slider ->setValue(18);
+        slider ->setValue(50);
 
         QPushButton *button = new QPushButton();
         button ->setText("按R开启连点");
@@ -28,11 +29,22 @@ int ui(int argc, char *argv[])
 
         window.setLayout(layout);
 
+        QTimer *timer = new QTimer(&window);
+
         QShortcut *shortcut = new QShortcut(Qt::Key_R, &window);
         QObject::connect(shortcut, &QShortcut::activated, [&](){
-                AutoClickRunning = !AutoClickRunning;
-                button->setText(AutoClickRunning ? "连点中，按R关闭" : "按R开ue启连点");
-                Autoclick(slider->value());
+                if(globalRPressed){
+                        int cps = slider->value();
+                        timer->start(1000 / cps);
+                        button->setText("连点中,按R关闭");
+                } else {
+                        timer->stop();
+                        button->setText("按R开启连点");
+                }
+        });
+
+        QObject::connect(timer, &QTimer::timeout, [&](){
+                DoOneClick();
         });
 
         window.show();
