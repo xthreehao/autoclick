@@ -1,41 +1,35 @@
 #include "head.h"
-#include <QApplication>
+#include "keyboard_monitor.h"
 #include <QWidget>
 #include <QPushButton>
 #include <QSlider>
 #include <QVBoxLayout>
-#include <QShortcut>
 #include <QTimer>
 
-int ui(int argc, char *argv[])
+void ui(KeyboardMonitor *monitor)
 {
-        QApplication app(argc , argv);
+        QWidget *window = new QWidget();
+        window->setWindowTitle("鼠标宏");
+        window->resize(300, 200);
+        window->setAttribute(Qt::WA_DeleteOnClose);
 
-        QWidget window;
-        window.setWindowTitle("鼠标宏");
-        window.resize(300,200);
-        
-        MyCustomSlider *slider = new MyCustomSlider(Qt::Horizontal, &window);
-        slider ->setRange(1 , 100);
-        slider ->setValue(50);
+        MyCustomSlider *slider = new MyCustomSlider(Qt::Horizontal, window);
+        slider->setRange(1, 100);
+        slider->setValue(50);
 
-        QPushButton *button = new QPushButton();
-        button ->setText("按R开启连点");
+        QPushButton *button = new QPushButton("按R开启连点");
 
-        QVBoxLayout *layout = new QVBoxLayout;
-
+        QVBoxLayout *layout = new QVBoxLayout(window);
         layout->addWidget(slider);
         layout->addWidget(button);
 
-        window.setLayout(layout);
+        QTimer *timer = new QTimer(window);
+        bool *clicking = new bool(false);
 
-        QTimer *timer = new QTimer(&window);
-
-        QShortcut *shortcut = new QShortcut(Qt::Key_R, &window);
-        QObject::connect(shortcut, &QShortcut::activated, [&](){
-                if(globalRPressed){
-                        int cps = slider->value();
-                        timer->start(1000 / cps);
+        QObject::connect(monitor, &KeyboardMonitor::shortcutTriggered, window, [=](){
+                *clicking = !*clicking;
+                if (*clicking) {
+                        timer->start(1000 / slider->value());
                         button->setText("连点中,按R关闭");
                 } else {
                         timer->stop();
@@ -43,11 +37,13 @@ int ui(int argc, char *argv[])
                 }
         });
 
-        QObject::connect(timer, &QTimer::timeout, [&](){
+        QObject::connect(timer, &QTimer::timeout, [=](){
                 DoOneClick();
         });
 
-        window.show();
+        QObject::connect(window, &QObject::destroyed, [=](){
+                delete clicking;
+        });
 
-        return app.exec();
+        window->show();
 }

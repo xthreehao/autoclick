@@ -3,9 +3,9 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include "hotkey_registrar.h"
+class KeyboardMonitor;
 
-int ui(int argc , char *argv[]);
+void ui(KeyboardMonitor *monitor);
 
 struct Log {
         void logERROR(const char* a);
@@ -27,5 +27,4 @@ class MyCustomSlider : public QSlider{
                 QLabel* m_displayLabel;
 };
 
-extern volatile bool globalRPressed;
 void DoOneClick();
