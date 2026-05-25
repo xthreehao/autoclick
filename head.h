@@ -1,11 +1,16 @@
 #pragma once
 #include <QSlider>
 #include <QLabel>
+#include <QPushButton>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QMainWindow>
+#include <QListWidget>
+#include <QStackedWidget>
+
 class KeyboardMonitor;
 
-void ui(KeyboardMonitor *monitor);
+void ui(KeyboardMonitor *rightMonitor, KeyboardMonitor *leftMonitor);
 
 struct Log {
         void logERROR(const char* a);
@@ -27,4 +32,25 @@ class MyCustomSlider : public QSlider{
                 QLabel* m_displayLabel;
 };
 
+class MainWindow : public QMainWindow{
+        Q_OBJECT
+
+public :
+        MainWindow();
+        void setMonitorright(KeyboardMonitor *monitor);
+        void setMonitorleft(KeyboardMonitor *monitor);
+private:
+        QListWidget *listWidget;
+        QStackedWidget *stackedWidget;
+        // 右键连点（page1）
+        QPushButton *clickButton;
+        MyCustomSlider *clickSlider;
+        // 左键连点（page2）
+        QPushButton *button2;
+        MyCustomSlider *slider2;
+private slots:
+        void createPages();
+        void changePage(QListWidgetItem *current,
+        QListWidgetItem *previous);
+};
 void DoOneClick();

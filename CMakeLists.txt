@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets DBus)
 
-add_executable(myapp main.cpp ui.cpp log.cpp MyCustomsSlider.cpp clicker.cpp keyboard_monitor.cpp keyboard_monitor.h)
+add_executable(myapp main.cpp ui.cpp log.cpp MainWindow.cpp MyCustomsSlider.cpp clicker.cpp keyboard_monitor.cpp keyboard_monitor.h head.h)
 
 target_link_libraries(myapp
     PRIVATE

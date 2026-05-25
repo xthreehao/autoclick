@@ -64,10 +64,10 @@ int KeyboardMonitor::findKeyboardDevice() {
             close(fd); continue;
         }
 
-        // Check for KEY_R capability
+        // Check for keyboard keys
         unsigned long key_bits[ULONG_INDEX(KEY_MAX) + 1] = {0};
         ioctl(fd, EVIOCGBIT(EV_KEY, sizeof(key_bits)), key_bits);
-        if (key_bits[ULONG_INDEX(KEY_R)] & ULONG_BIT(KEY_R)) {
+        if (key_bits[ULONG_INDEX(KEY_A)] & ULONG_BIT(KEY_A)) {
             qDebug() << "KeyboardMonitor: using" << path << "-" << name;
             return fd;
         }
@@ -77,10 +77,14 @@ int KeyboardMonitor::findKeyboardDevice() {
     return -1;
 }
 
+void KeyboardMonitor::setTriggerKey(unsigned short keyCode) {
+    m_triggerKey = keyCode;
+}
+
 void KeyboardMonitor::onReadyRead(int fd) {
     struct input_event ev;
     while (read(fd, &ev, sizeof(ev)) == sizeof(ev)) {
-        if (ev.type == EV_KEY && ev.value == 1 && ev.code == KEY_R) {
+        if (ev.type == EV_KEY && ev.value == 1 && ev.code == m_triggerKey) {
             emit shortcutTriggered();
         }
     }

@@ -9,11 +9,18 @@ int main(int argc, char *argv[])
         Log log;
         log.logINFO("已成功启动");
 
-        KeyboardMonitor monitor;
-        if (!monitor.start()) {
-                qWarning("全局热键启动失败，无法读取键盘设备");
+        KeyboardMonitor rightMonitor;
+        rightMonitor.setTriggerKey(KEY_R);
+        if (!rightMonitor.start()) {
+                qWarning("右键连点：键盘监控启动失败");
         }
 
-        ui(&monitor);
+        KeyboardMonitor leftMonitor;
+        leftMonitor.setTriggerKey(KEY_TAB);
+        if (!leftMonitor.start()) {
+                qWarning("左键连点：键盘监控启动失败");
+        }
+
+        ui(&rightMonitor, &leftMonitor);
         return app.exec();
 }
