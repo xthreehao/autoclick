@@ -17,6 +17,7 @@ bool setup_uinput(){
 
         ioctl(uinput_fd, UI_SET_EVBIT, EV_KEY);
         ioctl(uinput_fd, UI_SET_KEYBIT, BTN_LEFT);
+        ioctl(uinput_fd, UI_SET_KEYBIT, BTN_RIGHT);
 
         struct uinput_setup usetup;
         memset(&usetup, 0, sizeof(usetup));
@@ -38,8 +39,10 @@ void cleanup_uinput(){
         }
 }
 
-void DoOneClick(){
+void DoOneClick(bool left){
         if(uinput_fd < 0 && !setup_uinput()) return;
+
+        unsigned short btn = left ? BTN_LEFT : BTN_RIGHT;
 
 #ifdef Q_OS_WIN
         mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
@@ -48,7 +51,7 @@ void DoOneClick(){
         memset(&ev, 0, sizeof(ev));
 
         ev.type = EV_KEY;
-        ev.code = BTN_LEFT;
+        ev.code = btn;
         ev.value = 1;
         write(uinput_fd, &ev, sizeof(ev));
 
@@ -59,7 +62,7 @@ void DoOneClick(){
 
         memset(&ev, 0, sizeof(ev));
         ev.type = EV_KEY;
-        ev.code = BTN_LEFT;
+        ev.code = btn;
         ev.value = 0;
         write(uinput_fd, &ev, sizeof(ev));
 
